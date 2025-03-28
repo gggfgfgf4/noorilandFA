@@ -1,218 +1,185 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>home</title>
-<style>
+  <meta charset="utf-8">
+  <title>home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
     body {
-        background-image: url("backgroundOG.jpg");
-        background-size: cover;
-        background-repeat: repeat;
-        text-align: center;
-        margin: 0;
-        direction: rtl;
+      background-image: url("backgroundOG.jpg");
+      background-size: cover;
+      background-repeat: repeat;
+      text-align: center;
+      margin: 0;
+      direction: rtl;
+      font-family: Arial, sans-serif;
     }
-
+    
+    header {
+      padding: 20px;
+    }
+    
     #logo {
-        width: 300px;
-        border-bottom: 3px solid #232323;
+      width: 300px;
+      border-bottom: 3px solid #232323;
     }
-
-    #boxone {
-        background: #E97274;
-        border: 3px solid #262626;
-        border-radius: 6px;
-        width: 60px;
-        padding: 20px;
-        position: absolute;
-        top: 40%;
-        left: 10%;
-        transform: translate(-50%, -50%)
+    
+    .boxes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-	
-	#boxtwo{
-		background:#2692BD;
-        border: 3px solid #262626;
-        border-radius: 6px;
-        width: 60px;
-        padding: 20px;
-        position: absolute;
-        top: 40%;
-        left: 20%;
-        transform: translate(-50%, -50%)
-	}
-	
-	#boxthree{
-		background:#19B250;
-        border: 3px solid #262626;
-        border-radius: 6px;
-        width: 60px;
-        padding: 20px;
-        position: absolute;
-        top: 40%;
-        left: 30%;
-        transform: translate(-50%, -50%)
-	}
-	
-	#boxfore{
-		background:#AFB065;
-        border: 3px solid #262626;
-        border-radius: 6px;
-        width: 60px;
-        padding: 20px;
-        position: absolute;
-        top: 40%;
-        left: 70%;
-        transform: translate(-50%, -50%)
-	}
-	
-	#boxfive{
-		background:#E883DB;
-        border: 3px solid #262626;
-        border-radius: 6px;
-        width: 60px;
-        padding: 20px;
-        position: absolute;
-        top: 40%;
-        left: 80%;
-        transform: translate(-50%, -50%)
-	}
-	
-	#boxsix{
-		background:#C09611;
-        border: 3px solid #262626;
-        border-radius: 6px;
-        width: 60px;
-        padding: 20px;
-        position: absolute;
-        top: 40%;
-        left: 90%;
-        transform: translate(-50%, -50%)
-	}
-	
-@-webkit-keyframes sheen {
-  0% {
-    -webkit-transform: skewY(-45deg) translateX(0);
-            transform: skewY(-45deg) translateX(0);
-  }
-  100% {
-    -webkit-transform: skewY(-45deg) translateX(12.5em);
-            transform: skewY(-45deg) translateX(12.5em);
-  }
-}
-@keyframes sheen {
-  0% {
-    -webkit-transform: skewY(-45deg) translateX(0);
-            transform: skewY(-45deg) translateX(0);
-  }
-  100% {
-    -webkit-transform: skewY(-45deg) translateX(12.5em);
-            transform: skewY(-45deg) translateX(12.5em);
-  }
-}
-.wrapper {
-  display: block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-}
-.button {
-  padding: 0.75em 2em;
-  text-align: center;
-  text-decoration: none;
-  color:black;
-  border: 2px solid #2194E0;
-  font-size: 24px;
-  display: inline-block;
-  border-radius: 0.3em;
-  -webkit-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
-  position: relative;
-  overflow: hidden;
-  background:#28B2B2;
-}
-.button:before {
-  content: "";
-  background-color:#28B2B2;
-  height: 100%;
-  width: 3em;
-  display: block;
-  position: absolute;
-  top: 0;
-  left: -4.5em;
-  -webkit-transform: skewX(-45deg) translateX(0);
-          transform: skewX(-45deg) translateX(0);
-  -webkit-transition: none;
-  transition: none;
-}
-.button:hover {
-  background-color: #2194E0;
-  color: #fff;
-  border-bottom: 4px solid #1977b5;
-}
-.button:hover:before {
-  -webkit-transform: skewX(-45deg) translateX(13.5em);
-          transform: skewX(-45deg) translateX(13.5em);
-  -webkit-transition: all 0.5s ease-in-out;
-	}
-	
-
-</style>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    .box {
+      border: 3px solid #262626;
+      border-radius: 6px;
+      padding: 20px;
+      text-align: center;
+      color: white;
+    }
+    
+    #boxone  { background: #E97274; }
+    #boxtwo  { background: #2692BD; }
+    #boxthree { background: #19B250; }
+    #boxfore { background: #AFB065; }
+    #boxfive { background: #E883DB; }
+    #boxsix  { background: #C09611; }
+    
+    .box p {
+      margin: 0;
+      font-size: 16px;
+    }
+    
+    .box a {
+      color: aliceblue;
+      text-decoration: none;
+    }
+    
+    .wrapper {
+      margin: 40px auto;
+    }
+    
+    .button {
+      padding: 0.75em 2em;
+      text-align: center;
+      text-decoration: none;
+      color: black;
+      border: 2px solid #2194E0;
+      font-size: 24px;
+      display: inline-block;
+      border-radius: 0.3em;
+      transition: all 0.2s ease-in-out;
+      position: relative;
+      overflow: hidden;
+      background: #28B2B2;
+    }
+    
+    .button:before {
+      content: "";
+      background-color: #28B2B2;
+      height: 100%;
+      width: 3em;
+      display: block;
+      position: absolute;
+      top: 0;
+      left: -4.5em;
+      transform: skewX(-45deg) translateX(0);
+    }
+    
+    .button:hover {
+      background-color: #2194E0;
+      color: #fff;
+      border-bottom: 4px solid #1977b5;
+    }
+    
+    .button:hover:before {
+      transform: skewX(-45deg) translateX(13.5em);
+      transition: all 0.5s ease-in-out;
+    }
+    
+    footer {
+      margin-top: 20px;
+      font-size: 14px;
+    }
+    
+    footer a {
+      background: #B5B5B5;
+      color: #9D4307;
+      font-weight: bold;
+      text-decoration: none;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    
+    @media (max-width: 600px) {
+      header, .boxes, .wrapper {
+        width: 95%;
+        margin: 0 auto;
+      }
+      .button {
+        font-size: 20px;
+        padding: 0.5em 1.5em;
+      }
+      #logo {
+        width: 200px;
+      }
+    }
+  </style>
 </head>
 <body>
-<header id="heather">
-    <img src="logo.png" alt="" id="logo">
+  <header>
+    <img src="logo.png" alt="لوگو" id="logo">
     <h3>دنبال کردی منو؟</h3>
-</header>
-<div id="boxone">
-    <p class="txt">مطلب دوست داری؟
-        <br>
-        <a href="blog.html" style="color: aliceblue">بیا تو وبلاگ ما!</a>
-    </p>
-</div>
-<br>
-<div id="boxtwo">
-    <p class="txt">پاورپوینت نمیتونی بسازی؟
-        <br>
-        <a href="https://sites.google.com/view/nooritech" style="color: aliceblue">بیا توی نوری تِک!</a>
-    </p>
-</div>
-<br>
-<div id="boxthree">
-    <p class="txt">طلا میخوای بخری؟
-        <br>
-        <a href="https://milli.gold" style="color: aliceblue">از میلی طلا بخر!</a>
-    </p>
-</div>
-<br>
-<div id="boxfore">
-    <p class="txt">سایت ارزون میخوای؟
-        <br>
-        <a href="https://sites.google.com/view/nooritech" style="color: aliceblue">بیا توی نوری تِک!</a>
-    </p>
-</div>
-<br>
-<div id="boxfive">
-    <p class="txt">رستوران خیلی خیلی دوره؟
-        <br>
-        <a href="https://sites.google.com" style="color: aliceblue">بیا توی اسنپفود! </a>
-    </p>
-</div>
-<br>
-<div id="boxsix">
-    <p class="txt">هوش ایرانی میخوای؟
-        <br>
-        <a href="https://www.snappfood.ir/" style="color: aliceblue">با هوشنگ چت کن!</a>
-    </p>
-</div>
-<br><br><br>
-	<div class="wrapper">
-  <a href="game.html" class="button">بازی آبنبات!</a>
-<footer id="footer">همه ی حقوق این سایت برای <a href="https://sites.google.com/view/noori0688" style="background:#B5B5B5; color:#9D4307"><strong>امیر علی نوری</strong></a> می باشد.</footer>
-</div>
-
+  </header>
+  
+  <div class="boxes">
+    <div class="box" id="boxone">
+      <p>
+        مطلب دوست داری؟<br>
+        <a href="blog.html" style="color:black">بیا تو وبلاگ ما!</a>
+      </p>
+    </div>
+    <div class="box" id="boxtwo">
+      <p>
+        پاورپوینت نمیتونی بسازی؟<br>
+        <a href="https://sites.google.com/view/nooritech" style="color:black">بیا توی نوری تِک!</a>
+      </p>
+    </div>
+    <div class="box" id="boxthree">
+      <p>
+        طلا میخوای بخری؟<br>
+        <a href="https://milli.gold" style="color:black">از میلی طلا بخر!</a>
+      </p>
+    </div>
+    <div class="box" id="boxfore">
+      <p>
+        سایت ارزون میخوای؟<br>
+        <a href="https://sites.google.com/view/nooritech" style="color:black">بیا توی نوری تِک!</a>
+      </p>
+    </div>
+    <div class="box" id="boxfive">
+      <p>
+        رستوران خیلی خیلی دوره؟<br>
+        <a href="https://sites.google.com" style="color:black">بیا توی اسنپفود!</a>
+      </p>
+    </div>
+    <div class="box" id="boxsix">
+      <p>
+        هوش ایرانی میخوای؟<br>
+        <a href="https://www.snappfood.ir/" style="color:black">با هوشنگ چت کن!</a>
+      </p>
+    </div>
+  </div>
+  
+  <div class="wrapper">
+    <a href="game.html" class="button">بازی آبنبات!</a>
+  </div>
+  
+  <footer>
+    همه‌ی حقوق این سایت برای <a href="https://sites.google.com/view/noori0688"><strong>امیر علی نوری</strong></a> می‌باشد.
+  </footer>
 </body>
 </html>
