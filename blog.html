@@ -1,136 +1,187 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>blog2</title>
-<style>
-	body {
-    background-image: url("background.jpg");
-    background-size: cover; 
-    background-position: center; 
-    background-repeat: no-repeat; 
-    text-align: center; 
-    margin: 0; 
-		direction: rtl;
-}
-	#header{
-		border-bottom: 3px solid black;;
-		background: #4CA6DE;
-		border-radius: 31px;
-	}
-	#footer{
-		background:#6450FF;
-		border-top: 3px solid black;
-		border-radius: 9px;
-		top: 0%;
-		border: 100%;
-	}
-	
-	.blogc{
-		border: 3px SOLID #020202;
-		background:#AF6D6E;
-		border-radius: 16px;
-		width: 1000px
-		opacity: 0;
-        transform: translateY(50px) scale(0.8);
-}
-
-	.bropic{
-		border-radius: 90px;
-		width: 53px;
-	}
-	
-	.txtandpic{
-		background: #9ED8F3;
-		border: 2px SOLID #020202;
-		border-radius: 6px;
-}
-	
-	.apic{
-		right:0px;
-	}
-	
-	.picino{
-		border: 2px SOLID #020202;
-		right:0px;
-		left: 100px;
-		width: 363px;
-		height: 363px;
-		border-radius: 16px;
-	}
-	
-	#botj{
-		background: #56C871;
-		border: 1px solid #2B1B1C;
-		border-radius:5px;
-		width: 12px;
-		height: 11px;
-	}
-	
-</style>
-	 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/moment-jalaali@0.10.1/moment-jalaali.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <title>blog2</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background-image: url("background.jpg");
+      background-size: cover; 
+      background-position: center; 
+      background-repeat: no-repeat; 
+      text-align: center; 
+      margin: 0; 
+      direction: rtl;
+      font-family: Arial, sans-serif;
+    }
+    
+    #header {
+      background: #4CA6DE;
+      border-bottom: 3px solid black;
+      border-radius: 31px;
+      padding: 20px;
+      text-align: center;
+    }
+    #header img {
+      width: 140px;
+      max-width: 100%;
+    }
+    
+    #footer {
+      background: #6450FF;
+      border-top: 3px solid black;
+      border-radius: 9px;
+      padding: 10px 20px;
+      text-align: center;
+      margin-top: 20px;
+    }
+    #footer a {
+      color: aliceblue;
+      text-decoration: none;
+    }
+    
+    .blogc {
+      border: 3px solid #020202;
+      background: #AF6D6E;
+      border-radius: 16px;
+      max-width: 1000px;
+      margin: 30px auto;
+      opacity: 0;
+      transform: translateY(50px) scale(0.8);
+      padding: 20px;
+    }
+    
+    .bro {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .bropic {
+      border-radius: 50%;
+      width: 53px;
+    }
+    .topic {
+      margin: 10px 0 0;
+    }
+    
+    .txtandpic {
+      background: #9ED8F3;
+      border: 2px solid #020202;
+      border-radius: 6px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
+    
+    .atxt {
+      flex: 1 1 300px;
+      text-align: right;
+    }
+    
+    .apic {
+      flex: 1 1 300px;
+      text-align: center;
+    }
+    
+    .picino {
+      border: 2px solid #020202;
+      width: 100%;
+      max-width: 363px;
+      height: auto;
+      border-radius: 16px;
+    }
+    
+    #bottij {
+      width: 100%;
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    #botj {
+      background: #56C871;
+      border: 1px solid #2B1B1C;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    
+    @media (max-width: 600px) {
+      .blogc {
+        width: 95%;
+        padding: 10px;
+      }
+      .txtandpic {
+        flex-direction: column;
+      }
+      #header img {
+        width: 100px;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/moment-jalaali@0.10.1/moment-jalaali.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
-<center>
 <body>
-<header id="header">
-	<img src="logo.png" width="140" height="" alt=""/>
-	<br>
-<div id="today-date"> تاریخ امروز: </div>
-	
-</header>
-	<br><br><br><br><br><br><br><br><br><br>
-	<div class="blogc">
-	<center>
-	<div class="bro">
-		<img src="bro.png" class="bropic" alt=""><h3 class="topic">خوش اومدید!</h3>
-	</div>
-		</center>
-	<div class="txtandpic">
-		<div class="atxt">
-			<p>سلام به همۀ دوستان عزیز!
+  <header id="header">
+    <img src="logo.png" alt="لوگو">
+    <div id="today-date">تاریخ امروز:</div>
+  </header>
+  
+  <div class="blogc">
+    <div class="bro">
+      <img src="bro.png" class="bropic" alt="">
+      <h3 class="topic">خوش اومدید!</h3>
+    </div>
+    <div class="txtandpic">
+      <div class="atxt">
+        <p>
+          سلام به همۀ دوستان عزیز!<br><br>
+          خیلی خوشحالم که اینجا هستید و به وبلاگ من سر زدید. امیدوارم مطالبی که اینجا به اشتراک می‌گذارم براتون مفید، جالب و سرگرم‌کننده باشه. این وبلاگ جاییه که توش از علاقه‌هام، تجربیاتم و چیزایی که یاد می‌گیرم براتون می‌نویسم. اگه شما هم مثل من عاشق یادگیری، تکنولوژی، دنیای دیجیتال و موضوعات جذاب دیگه هستید، حتماً اینجا براتون یه دنیای هیجان‌انگیز خواهد بود!<br><br>
+          <a href="https://www.aparat.com/nooriland">
+            ازتون یه درخواست کوچیک دارم! لطفاً اگه از مطالب این وبلاگ خوشتون اومد، به چنل آپارات من هم سر بزنید و دنبالش کنید. توی اونجا ویدیوهای جذاب و متنوعی منتشر می‌کنم که مطمئنم ازشون خوشتون میاد. حمایت شما باعث می‌شه که با انگیزه‌ی بیشتری به تولید محتوا ادامه بدم و مطالب بهتری براتون آماده کنم.
+          </a><br><br>
+          پس حتماً عضو بشید، ویدیوها رو ببینید، نظراتتون رو برام بنویسید و اگه دوست داشتید، با دوستاتون هم به اشتراک بذارید. مرسی که اینجا هستید و همراه منید!
+        </p>
+      </div>
+      <div class="apic">
+        <img src="pic1b.jpg" class="picino" alt="">
+      </div>
+      <div id="bottij">
+        <a href="blog2.html"><button id="botj">ورود</button></a>
+      </div>
+    </div>
+  </div>
+  
+  <footer id="footer">
+    همه‌ی حقوق این سایت برای <a href="https://sites.google.com/view/noori0688"><strong>امیر علی نوری</strong></a> می‌باشد.
+  </footer>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        calendar: 'persian',
+        numberingSystem: 'arab'
+      };
+      const today = new Date();
+      const persianDate = today.toLocaleDateString('fa-IR', options);
+      document.getElementById('today-date').textContent = persianDate;
 
-خیلی خوشحالم که اینجا هستید و به وبلاگ من سر زدید. امیدوارم مطالبیه که اینجا به اشتراک می‌گذارم براتون مفید، جالب و سرگرم‌کننده باشه. این وبلاگ جاییه که توش از علاقه‌هام، تجربیاتم و چیزایی که یاد می‌گیرم براتون می‌نویسم. اگه شما هم مثل من عاشق یادگیری، تکنولوژی، دنیای دیجیتال و موضوعات جذاب دیگه هستید، حتماً اینجا براتون یه دنیای هیجان‌انگیز خواهد بود!
-<a href="https://www.aparat.com/nooriland">
-ازتون یه درخواست کوچیک دارم! ???? لطفاً اگه از مطالب این وبلاگ خوشتون اومد، به چنل آپارات من هم سر بزنید و دنبالش کنید. توی اونجا ویدیوهای جذاب و متنوعی منتشر می‌کنم که مطمئنم ازشون خوشتون میاد. حمایت شما باعث می‌شه که با انگیزه‌ی بیشتری به تولید محتوا ادامه بدم و مطالب بهتری براتون آماده کنم.
-</a>
-پس حتماً عضو بشید، ویدیوها رو ببینید، نظراتتون رو برام بنویسید و اگه دوست داشتید، با دوستاتون هم به اشتراک بذارید. مرسی که اینجا هستید و همراه منید! ????????</p>
-		</div>
-		<div class="apic">
-			<center>
-			<img src="pic1b.jpg" class="picino" alt="">
-			</center>
-		</div>
-		<div id="bottij">
-			<a href="blog2.html"><botton id="botj">ورود</botton></a>
-		</div>
-	</div>
-	</div>
-	<br><br><br><br><br><br><br><br><br><br>
-<footer id="footer">همه ی حقوق این سایت برای <a href="https://sites.google.com/view/noori0688" style="color:aliceblue"><strong>امیر علی نوری</strong></a> می باشد.</footer>
-</center>
-	<script>
- document.addEventListener('DOMContentLoaded', function() {
-            const options = {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                calendar: 'persian',
-                numberingSystem: 'arab'
-            };
-            const today = new Date();
-            const persianDate = today.toLocaleDateString('fa-IR', options);
-            document.getElementById('today-date').textContent = persianDate;
-        });
-		gsap.to(".blogc", {
-            duration: 3,
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            ease: "elastic.out(1, 0.5)"
-        });
-	</script>
+      gsap.to(".blogc", {
+        duration: 3,
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        ease: "elastic.out(1, 0.5)"
+      });
+    });
+  </script>
 </body>
 </html>
