@@ -1,0 +1,635 @@
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بازی گرفتن آبنبات</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Tahoma', 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      direction: rtl;
+    }
+    
+    #game-container {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      width: 100%;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    
+    #header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    h1 {
+      font-size: 1.8rem;
+      color: #333;
+    }
+    
+    .game-controls {
+      display: flex;
+      align-items: center;
+    }
+    
+    #toggle-music-btn {
+      display: none;
+      padding: 8px 15px;
+      background-color: #9c27b0;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    
+    #toggle-music-btn:hover {
+      background-color: #7b1fa2;
+    }
+    
+    #toggle-music-btn.playing {
+      background-color: #673ab7;
+    }
+    
+    .switch-container {
+      display: flex;
+      align-items: center;
+      margin-right: 15px;
+    }
+    
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+      margin-right: 10px;
+    }
+    
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 24px;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+    
+    input:checked + .slider {
+      background-color: #f44336;
+    }
+    
+    input:focus + .slider {
+      box-shadow: 0 0 1px #f44336;
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    
+    #candy-game {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    #game-score {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #ff6b6b;
+    }
+    
+    #game-canvas-container {
+      width: 100%;
+      margin-bottom: 15px;
+      position: relative;
+    }
+    
+    #game-canvas {
+      background-color: #fff;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      width: 100%;
+      height: 300px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    #start-game-btn {
+      padding: 10px 20px;
+      background-color: #ff6b6b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      margin-bottom: 10px;
+    }
+    
+    #start-game-btn:hover {
+      background-color: #ff5252;
+    }
+    
+    #game-over-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(255, 87, 87, 0.95);
+      color: white;
+      padding: 20px 40px;
+      border-radius: 10px;
+      font-size: 24px;
+      font-weight: bold;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      z-index: 100;
+      display: none;
+      animation: popup-appear 0.3s ease-out;
+    }
+    
+    @keyframes popup-appear {
+      0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+  </style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <div id="game-container">
+    <div id="header">
+      <h1>بازی گرفتن آبنبات</h1>
+      <div class="game-controls">
+        <div class="switch-container">
+          <span>حالت سخت</span>
+          <label class="switch">
+            <input type="checkbox" id="hard-mode-toggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div id="candy-game">
+      <div id="game-score">امتیاز: <span id="score">0</span></div>
+      <div id="game-canvas-container">
+        <canvas id="game-canvas" width="600" height="300"></canvas>
+      </div>
+      <button id="start-game-btn">شروع بازی</button>
+    </div>
+  </div>
+  <div id="game-over-popup">بازی تمام شد!</div>
+
+  <script>
+    const config = {
+      player: {
+        defaultWidth: 60,
+        defaultHeight: 30,
+        defaultSpeed: 8,
+        defaultColor: '#4CAF50',
+        hardModeSpeed: 10
+      },
+      
+      candy: {
+        types: [
+          { color: '#FF5252', points: 5, radius: 15 },
+          { color: '#FF9800', points: 10, radius: 10 },
+          { color: '#FFEB3B', points: 15, radius: 8 }
+        ],
+        defaultSpawnRate: 0.03,
+        hardModeSpawnRate: 0.035,
+      },
+      
+      bomb: {
+        defaultRadius: 15,
+        defaultSpawnRate: 0.01,
+        hardModeSpawnRate: 0.025,
+      },
+      
+      game: {
+        normalSpeedMultiplier: 1,
+        hardSpeedMultiplier: 1.5,
+      },
+      controls: {
+        buttonSize: 50,
+        buttonColor: 'rgba(0, 0, 0, 0.3)',
+        buttonHoverColor: 'rgba(0, 0, 0, 0.5)',
+        buttonIconColor: 'white'
+      }
+    };
+
+    class CandyCatcherGame {
+      constructor(canvas, scoreElement, startButton, gameOverPopup) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.scoreElement = scoreElement;
+        this.startButton = startButton;
+        this.gameOverPopup = gameOverPopup;
+        
+        this.gameRunning = false;
+        this.score = 0;
+        this.player = {
+          x: canvas.width / 2 - config.player.defaultWidth / 2,
+          y: canvas.height - 40,
+          width: config.player.defaultWidth,
+          height: config.player.defaultHeight,
+          speed: config.player.defaultSpeed,
+          color: config.player.defaultColor
+        };
+        
+        this.candies = [];
+        this.bombs = [];
+        this.bombImage = null;
+        
+        this.leftPressed = false;
+        this.rightPressed = false;
+        this.animationFrameId = null;
+        this.bombSpawnRate = config.bomb.defaultSpawnRate;
+        this.candySpawnRate = config.candy.defaultSpawnRate;
+        this.gameSpeedMultiplier = config.game.normalSpeedMultiplier;
+        this.hardMode = false;
+        
+        this.touchControls = {
+          leftButton: { x: 20, y: canvas.height - 70, pressed: false },
+          rightButton: { x: 90, y: canvas.height - 70, pressed: false }
+        };
+        
+        this.setupEventListeners();
+        this.initGame();
+      }
+      
+      setupEventListeners() {
+        document.addEventListener('keydown', this.keyDownHandler.bind(this));
+        document.addEventListener('keyup', this.keyUpHandler.bind(this));
+        
+        this.canvas.addEventListener('touchmove', (e) => {
+          e.preventDefault();
+          const rect = this.canvas.getBoundingClientRect();
+          const touchX = e.touches[0].clientX - rect.left;
+          this.player.x = touchX - this.player.width / 2;
+          
+          if (this.player.x < 0) this.player.x = 0;
+          if (this.player.x + this.player.width > this.canvas.width) {
+            this.player.x = this.canvas.width - this.player.width;
+          }
+        });
+        
+        this.canvas.addEventListener('touchstart', this.handleTouchStart.bind(this));
+        this.canvas.addEventListener('touchend', this.handleTouchEnd.bind(this));
+        
+        this.canvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
+        this.canvas.addEventListener('mouseup', this.handleMouseUp.bind(this));
+        
+        window.addEventListener('resize', this.resizeCanvas.bind(this));
+        
+        this.startButton.addEventListener('click', this.toggleGame.bind(this));
+      }
+      
+      keyDownHandler(e) {
+        if (e.key === 'ArrowLeft' || e.key === 'Left') {
+          this.leftPressed = true;
+        } else if (e.key === 'ArrowRight' || e.key === 'Right') {
+          this.rightPressed = true;
+        }
+      }
+      
+      keyUpHandler(e) {
+        if (e.key === 'ArrowLeft' || e.key === 'Left') {
+          this.leftPressed = false;
+        } else if (e.key === 'ArrowRight' || e.key === 'Right') {
+          this.rightPressed = false;
+        }
+      }
+      
+      handleTouchStart(e) {
+        if (!this.gameRunning) return;
+        e.preventDefault();
+        
+        const rect = this.canvas.getBoundingClientRect();
+        const touchX = e.touches[0].clientX - rect.left;
+        const touchY = e.touches[0].clientY - rect.top;
+        
+        if (this.isPointInButton(touchX, touchY, this.touchControls.leftButton)) {
+          this.leftPressed = true;
+          this.touchControls.leftButton.pressed = true;
+        } else if (this.isPointInButton(touchX, touchY, this.touchControls.rightButton)) {
+          this.rightPressed = true;
+          this.touchControls.rightButton.pressed = true;
+        }
+      }
+      
+      handleTouchEnd(e) {
+        e.preventDefault();
+        this.leftPressed = false;
+        this.rightPressed = false;
+        this.touchControls.leftButton.pressed = false;
+        this.touchControls.rightButton.pressed = false;
+      }
+      
+      handleMouseDown(e) {
+        if (!this.gameRunning) return;
+        
+        const rect = this.canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        
+        if (this.isPointInButton(mouseX, mouseY, this.touchControls.leftButton)) {
+          this.leftPressed = true;
+          this.touchControls.leftButton.pressed = true;
+        } else if (this.isPointInButton(mouseX, mouseY, this.touchControls.rightButton)) {
+          this.rightPressed = true;
+          this.touchControls.rightButton.pressed = true;
+        }
+      }
+      
+      handleMouseUp() {
+        this.leftPressed = false;
+        this.rightPressed = false;
+        this.touchControls.leftButton.pressed = false;
+        this.touchControls.rightButton.pressed = false;
+      }
+      
+      isPointInButton(x, y, button) {
+        const size = config.controls.buttonSize;
+        return x >= button.x && x <= button.x + size && 
+               y >= button.y && y <= button.y + size;
+      }
+      
+      drawControlButtons() {
+        const size = config.controls.buttonSize;
+        
+        this.ctx.fillStyle = this.touchControls.leftButton.pressed ? 
+          config.controls.buttonHoverColor : config.controls.buttonColor;
+        this.ctx.beginPath();
+        this.ctx.arc(this.touchControls.leftButton.x + size/2, 
+                     this.touchControls.leftButton.y + size/2, 
+                     size/2, 0, Math.PI * 2);
+        this.ctx.fill();
+        
+        this.ctx.fillStyle = this.touchControls.rightButton.pressed ? 
+          config.controls.buttonHoverColor : config.controls.buttonColor;
+        this.ctx.beginPath();
+        this.ctx.arc(this.touchControls.rightButton.x + size/2, 
+                     this.touchControls.rightButton.y + size/2, 
+                     size/2, 0, Math.PI * 2);
+        this.ctx.fill();
+        
+        this.ctx.fillStyle = config.controls.buttonIconColor;
+        
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.touchControls.leftButton.x + size*0.7, this.touchControls.leftButton.y + size*0.3);
+        this.ctx.lineTo(this.touchControls.leftButton.x + size*0.3, this.touchControls.leftButton.y + size*0.5);
+        this.ctx.lineTo(this.touchControls.leftButton.x + size*0.7, this.touchControls.leftButton.y + size*0.7);
+        this.ctx.fill();
+        
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.touchControls.rightButton.x + size*0.3, this.touchControls.rightButton.y + size*0.3);
+        this.ctx.lineTo(this.touchControls.rightButton.x + size*0.7, this.touchControls.rightButton.y + size*0.5);
+        this.ctx.lineTo(this.touchControls.rightButton.x + size*0.3, this.touchControls.rightButton.y + size*0.7);
+        this.ctx.fill();
+      }
+      
+      resizeCanvas() {
+        this.canvas.width = this.canvas.parentElement.clientWidth;
+        this.touchControls.leftButton.y = this.canvas.height - 70;
+        this.touchControls.rightButton.y = this.canvas.height - 70;
+        this.initGame();
+      }
+      
+      toggleGame() {
+        if (!this.gameRunning) {
+          this.gameRunning = true;
+          this.startButton.textContent = 'توقف بازی';
+          this.updateDifficultySettings();
+          this.gameLoop();
+        } else {
+          this.gameRunning = false;
+          this.startButton.textContent = 'شروع بازی';
+          cancelAnimationFrame(this.animationFrameId);
+          this.initGame();
+        }
+      }
+      
+      setHardMode(isHardMode) {
+        this.hardMode = isHardMode;
+        this.updateDifficultySettings();
+      }
+      
+      updateDifficultySettings() {
+        if (this.hardMode) {
+          this.bombSpawnRate = config.bomb.hardModeSpawnRate;
+          this.candySpawnRate = config.candy.hardModeSpawnRate;
+          this.gameSpeedMultiplier = config.game.hardSpeedMultiplier;
+          this.player.speed = config.player.hardModeSpeed;
+        } else {
+          this.bombSpawnRate = config.bomb.defaultSpawnRate;
+          this.candySpawnRate = config.candy.defaultSpawnRate;
+          this.gameSpeedMultiplier = config.game.normalSpeedMultiplier;
+          this.player.speed = config.player.defaultSpeed;
+        }
+      }
+      
+      initGame() {
+        this.score = 0;
+        this.scoreElement.textContent = this.score;
+        this.candies = [];
+        this.bombs = [];
+        this.player.x = this.canvas.width / 2 - this.player.width / 2;
+        this.drawStaticElements();
+      }
+      
+      drawStaticElements() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        this.ctx.fillStyle = this.player.color;
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.player.x, this.player.y);
+        this.ctx.lineTo(this.player.x + this.player.width, this.player.y);
+        this.ctx.lineTo(this.player.x + this.player.width / 2, this.player.y - this.player.height);
+        this.ctx.closePath();
+        this.ctx.fill();
+        
+        this.ctx.fillStyle = '#333';
+        this.ctx.font = '16px Tahoma';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText('از کلیدهای ← و → برای حرکت استفاده کنید', this.canvas.width / 2, this.canvas.height / 2 - 30);
+        this.ctx.fillText('آبنبات‌های در حال سقوط را برای امتیاز بگیرید!', this.canvas.width / 2, this.canvas.height / 2 - 10);
+        this.ctx.fillText('از بمب‌ها دوری کنید وگرنه بازی از نو شروع می‌شود!', this.canvas.width / 2, this.canvas.height / 2 + 10);
+        
+        this.ctx.fillStyle = "#333";
+        this.ctx.beginPath();
+        this.ctx.arc(this.canvas.width / 2, this.canvas.height / 2 + 30, 10, 0, Math.PI * 2);
+        this.ctx.fill();
+        
+        this.drawControlButtons();
+      }
+      
+      createCandy() {
+        const type = config.candy.types[Math.floor(Math.random() * config.candy.types.length)];
+        
+        return {
+          x: Math.random() * (this.canvas.width - 20) + 10,
+          y: -20,
+          radius: type.radius,
+          color: type.color,
+          points: type.points,
+          speed: (Math.random() * 2 + 1) * this.gameSpeedMultiplier
+        };
+      }
+      
+      createBomb() {
+        return {
+          x: Math.random() * (this.canvas.width - 20) + 10,
+          y: -20,
+          radius: config.bomb.defaultRadius,
+          speed: (Math.random() * 3 + 2) * this.gameSpeedMultiplier
+        };
+      }
+      
+      gameLoop() {
+        if (!this.gameRunning) return;
+        
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        if (this.leftPressed && this.player.x > 0) {
+          this.player.x -= this.player.speed;
+        }
+        if (this.rightPressed && this.player.x + this.player.width < this.canvas.width) {
+          this.player.x += this.player.speed;
+        }
+        
+        this.ctx.fillStyle = this.player.color;
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.player.x, this.player.y);
+        this.ctx.lineTo(this.player.x + this.player.width, this.player.y);
+        this.ctx.lineTo(this.player.x + this.player.width / 2, this.player.y - this.player.height);
+        this.ctx.closePath();
+        this.ctx.fill();
+        
+        if (Math.random() < this.candySpawnRate) {
+          this.candies.push(this.createCandy());
+        }
+        if (Math.random() < this.bombSpawnRate) {
+          this.bombs.push(this.createBomb());
+        }
+        
+        for (let i = 0; i < this.candies.length; i++) {
+          const candy = this.candies[i];
+          candy.y += candy.speed;
+          
+          this.ctx.fillStyle = candy.color;
+          this.ctx.beginPath();
+          this.ctx.arc(candy.x, candy.y, candy.radius, 0, Math.PI * 2);
+          this.ctx.fill();
+          
+          if (candy.y + candy.radius > this.player.y - this.player.height && 
+              candy.y - candy.radius < this.player.y &&
+              candy.x > this.player.x && 
+              candy.x < this.player.x + this.player.width) {
+            this.score += candy.points;
+            this.scoreElement.textContent = this.score;
+            this.candies.splice(i, 1);
+            i--;
+          } 
+          else if (candy.y - candy.radius > this.canvas.height) {
+            this.candies.splice(i, 1);
+            i--;
+          }
+        }
+        
+        for (let i = 0; i < this.bombs.length; i++) {
+          const bomb = this.bombs[i];
+          bomb.y += bomb.speed;
+          
+          this.ctx.fillStyle = "#333";
+          this.ctx.beginPath();
+          this.ctx.arc(bomb.x, bomb.y, bomb.radius, 0, Math.PI * 2);
+          this.ctx.fill();
+          
+          if (bomb.y + bomb.radius > this.player.y - this.player.height && 
+              bomb.y - bomb.radius < this.player.y &&
+              bomb.x > this.player.x && 
+              bomb.x < this.player.x + this.player.width) {
+            this.gameRunning = false;
+            this.startButton.textContent = 'شروع بازی';
+            
+            this.gameOverPopup.style.display = 'block';
+            setTimeout(() => {
+              this.gameOverPopup.style.display = 'none';
+            }, 2000);
+            
+            this.initGame();
+            return; 
+          } 
+          else if (bomb.y - bomb.radius > this.canvas.height) {
+            this.bombs.splice(i, 1);
+            i--;
+          }
+        }
+        
+        this.drawControlButtons();
+        
+        this.animationFrameId = requestAnimationFrame(this.gameLoop.bind(this));
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.getElementById('game-canvas');
+      const scoreElement = document.getElementById('score');
+      const startButton = document.getElementById('start-game-btn');
+      const gameOverPopup = document.getElementById('game-over-popup');
+      const hardModeToggle = document.getElementById('hard-mode-toggle');
+      
+      const game = new CandyCatcherGame(canvas, scoreElement, startButton, gameOverPopup);
+      
+      hardModeToggle.addEventListener('change', function() {
+        game.setHardMode(this.checked);
+      });
+      
+      setTimeout(() => {
+        game.resizeCanvas();
+      }, 100);
+    });
+  </script>
+</body>
+</html>
